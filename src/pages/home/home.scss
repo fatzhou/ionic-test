@@ -1,0 +1,25 @@
+page-home {
+	.album-wrap {
+		overflow: hidden;
+	}
+	.album {
+		float: left;
+		width: 50%;
+		padding: 10px;
+		text-align: center;
+		overflow: hidden;
+		box-sizing: border-box;
+		border: 1px solid #ccc;
+		min-height: 200px;
+	}
+	.photo-wrap {
+		width: 50%;
+		float: left;
+		padding: 4px;
+		box-sizing: border-box;
+	}
+	img {
+		display: block;
+		width: 100%;
+	}
+}

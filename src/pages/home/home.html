@@ -1,0 +1,20 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      我的相册
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-list class="album-wrap">
+    <div class="album" *ngFor="let album of albums" (click)="goAlbumDetail(album)">
+      <p>{{ album.title }}({{ album.photos.length }})</p>
+      <div class="photo-wrap" *ngFor="let photo of album.photos.slice(0, 4)">
+        <img [src]="photo.thumbnailURL | cdvphotolibrary" />
+      </div>
+    </div>
+  </ion-list>
+  <!-- virtualScroll is still problematic -->
+
+</ion-content>

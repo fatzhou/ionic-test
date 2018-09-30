@@ -1,0 +1,15 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      {{ album.title }}
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  	<ion-list class="photo-list" *ngIf="album">
+  		<div class="img-wrap" *ngFor="let photo of album.photos" (press)="saveImage(photo)">
+  			<img [src]="photo.thumbnailURL | cdvphotolibrary">
+  		</div>
+    </ion-list>
+</ion-content>

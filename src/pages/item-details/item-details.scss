@@ -1,0 +1,15 @@
+page-item-details {
+	.photo-list {
+		overflow: hidden;
+	}
+	.img-wrap {
+		width: 50%;
+		float: left;
+		box-sizing: border-box;
+		padding: 10px;
+	}
+	img {
+		display: block;
+		width: 100%;
+	}
+}
