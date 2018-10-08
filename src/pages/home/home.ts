@@ -9,6 +9,7 @@ import { ItemDetailsPage } from '../item-details/item-details';
 
 import { PhotoLibrary, LibraryItem } from '@ionic-native/photo-library';
 
+
 const THUMBNAIL_WIDTH = 64;
 const THUMBNAIL_HEIGHT = 48;
 
@@ -34,6 +35,7 @@ export class HomePage {
     this.library = [];
 
     this.fetchAlbums();
+
 
   }
 
@@ -128,6 +130,7 @@ export class HomePage {
               this.albums.forEach(item => {
                 console.log("相册" + item.title + "的相片张数是" + item.photos.length);
               })
+              this.test(library[0].id);
               this.cd.detectChanges();
               // Library completely loaded
               // var pswpElement = document.querySelectorAll('.pswp')[0];
@@ -145,4 +148,28 @@ export class HomePage {
 
   trackById(index: number, libraryItem: LibraryItem): string { return libraryItem.id; }
 
+  test(id) {
+    try {
+      console.log("图片id:" + id);
+      cordova.plugins.photoLibrary.getThumbnail(
+        id, // or libraryItem.id
+        (res)=>{
+          console.log("123" + JSON.stringify(res))
+        },      
+        (res)=>{
+          console.log("456" + JSON.stringify(res))
+        },
+        { // optional options
+          thumbnailWidth: 512,
+          thumbnailHeight: 384,
+          quality: 0.8
+        })
+        // .then(res => {
+        //   console.log('getThumbnail:' + JSON.stringify(res))
+        // })      
+      } catch(e) {
+        console.log(e)
+      }
+
+  }
 }
