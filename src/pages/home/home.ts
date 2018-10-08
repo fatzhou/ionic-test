@@ -164,10 +164,10 @@ export class HomePage {
         console.log("getUrl 的返回值"+ JSON.stringify(res));
 
         console.log(" that newurl: " + that.newurl)
-        that.base64ToGallery.base64ToGallery(res.data, { prefix: '_img' }).then(
-          res => console.log('Saved image to gallery ', res),
-          err => console.log('Error saving image to gallery ', err)
-        );
+        // that.base64ToGallery.base64ToGallery(, { prefix: '_img' }).then(
+        //   res => console.log('Saved image to gallery ', res),
+        //   err => console.log('Error saving image to gallery ', err)
+        // );
       },
       function(res){
         that.newurl = 'data:image/jpeg;base64,'+res.data;
