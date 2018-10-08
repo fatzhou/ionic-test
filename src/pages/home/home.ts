@@ -3,18 +3,20 @@ import { ChangeDetectorRef } from '@angular/core';
 import { Platform } from 'ionic-angular';
 import { NavController } from 'ionic-angular';
 import { ToastController, ModalController } from 'ionic-angular';
+import { Base64ToGallery } from '@ionic-native/base64-to-gallery';
 
-import { PermissionsPage } from '../permissions/permissions';
+// import { PermissionsPage } from '../permissions/permissions';
 import { ItemDetailsPage } from '../item-details/item-details';
 
 import { PhotoLibrary, LibraryItem } from '@ionic-native/photo-library';
-
-const THUMBNAIL_WIDTH = 64;
-const THUMBNAIL_HEIGHT = 48;
-
-declare var PhotoSwipe;
-declare var PhotoSwipeUI_Default;
 declare var cordova;
+
+const THUMBNAIL_WIDTH = 256;
+const THUMBNAIL_HEIGHT = 192;
+
+// declare var PhotoSwipe;
+// declare var PhotoSwipeUI_Default;
+// declare var cordova;
 
 @Component({
   selector: 'page-home',
@@ -26,10 +28,15 @@ export class HomePage {
 
   library: LibraryItem[];
   albums:any = [];
+  newurl: any;
 
   constructor(public navCtrl: NavController,
-    private photoLibrary: PhotoLibrary, private platform: Platform, private cd: ChangeDetectorRef,
-    private toastCtrl: ToastController, private modalCtrl: ModalController) {
+      private photoLibrary: PhotoLibrary,
+      private platform: Platform,
+      private cd: ChangeDetectorRef,
+      private toastCtrl: ToastController,
+      private modalCtrl: ModalController,
+      private base64ToGallery: Base64ToGallery) {
 
     this.library = [];
 
@@ -120,6 +127,9 @@ export class HomePage {
         complete: () => {
               console.log('completed.........')
               this.library = library;
+
+
+              this.getURl(this.library[1].id);
               this.albums.forEach(item => {
                 item.photos = library.filter(x => {
                   return x.albumIds.indexOf(item.id) > -1;
@@ -144,5 +154,32 @@ export class HomePage {
   }
 
   trackById(index: number, libraryItem: LibraryItem): string { return libraryItem.id; }
+  getURl(id){
+    var that = this;
+    cordova.plugins.photoLibrary.getThumbnail(
+      id, // or libraryItem.id,
+      function(res){
+        that.newurl = 'data:image/jpeg;base64,'+res.data;
 
+        console.log("getUrl 的返回值"+ JSON.stringify(res));
+
+        console.log(" that newurl: " + that.newurl)
+        that.base64ToGallery.base64ToGallery(res.data, { prefix: '_img' }).then(
+          res => console.log('Saved image to gallery ', res),
+          err => console.log('Error saving image to gallery ', err)
+        );
+      },
+      function(res){
+        that.newurl = 'data:image/jpeg;base64,'+res.data;
+
+        console.log("getUrl 的返回值"+ JSON.stringify(res));
+        console.log("that  newurl: " + that.newurl)
+
+      },
+      { // optional options
+        thumbnailWidth: 512,
+        thumbnailHeight: 384,
+        quality: 0.8
+      })
+  }
 }
