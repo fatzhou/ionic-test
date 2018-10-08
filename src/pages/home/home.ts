@@ -42,6 +42,7 @@ export class HomePage {
 
     this.fetchAlbums();
 
+
   }
 
   goAlbumDetail(album) {
@@ -138,6 +139,7 @@ export class HomePage {
               this.albums.forEach(item => {
                 console.log("相册" + item.title + "的相片张数是" + item.photos.length);
               })
+              // this.test(library[0].id);
               this.cd.detectChanges();
               // Library completely loaded
               // var pswpElement = document.querySelectorAll('.pswp')[0];

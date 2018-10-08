@@ -29,9 +29,7 @@ export class ItemDetailsPage {
   saveImage(photo) {
     console.log("保存图片:" + photo.thumbnailURL);
     let fullPath = decodeURIComponent(photo.thumbnailURL).split(';')[1];
-    console.log(1234)
     let filePath = "file://" + fullPath.replace(/\/[^\/]+$/,  "");
-    console.log(5678)
     let fileName = fullPath.replace(/^.+\/([^\/]+)\.(jpg|jpeg|png)[^\/]+$/, "$1.$2");
     console.log(filePath)
     console.log(fileName)
