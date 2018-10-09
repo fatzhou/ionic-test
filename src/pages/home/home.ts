@@ -3,7 +3,7 @@ import { ChangeDetectorRef } from '@angular/core';
 import { Platform } from 'ionic-angular';
 import { NavController } from 'ionic-angular';
 import { ToastController, ModalController } from 'ionic-angular';
-import { Base64ToGallery } from '@ionic-native/base64-to-gallery';
+// import { Base64ToGallery } from '@ionic-native/base64-to-gallery';
 
 // import { PermissionsPage } from '../permissions/permissions';
 import { ItemDetailsPage } from '../item-details/item-details';
@@ -36,7 +36,7 @@ export class HomePage {
       private cd: ChangeDetectorRef,
       private toastCtrl: ToastController,
       private modalCtrl: ModalController,
-      private base64ToGallery: Base64ToGallery) {
+      ) {
 
     this.library = [];
 
@@ -162,10 +162,14 @@ export class HomePage {
       id, // or libraryItem.id,
       function(res){
         that.newurl = 'data:image/jpeg;base64,'+res.data;
-
+        let database = that.newurl;
+        // let fullpath = 
+        cordova.plugins.photoLibrary.saveImageBase64(database,cordova.file.externalDataDirectory,'newbaseimg.png',function(){
+          console.log("成功存储图片");
+        });
         console.log("getUrl 的返回值"+ JSON.stringify(res));
 
-        console.log(" that newurl: " + that.newurl)
+        // console.log(" that newurl: " + that.newurl)
         // that.base64ToGallery.base64ToGallery(, { prefix: '_img' }).then(
         //   res => console.log('Saved image to gallery ', res),
         //   err => console.log('Error saving image to gallery ', err)

@@ -271,9 +271,9 @@ photoLibrary.saveImageBase64 = function (url, path, name, success, error, option
 
   options = getThumbnailOptionsWithDefaults(options);
 
-  if (album.title) {
-    album = album.title;
-  }
+  // if (album.title) {
+  //   album = album.title;
+  // }
 
   cordova.exec(
     function (f) {
