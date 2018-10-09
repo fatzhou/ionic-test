@@ -210,17 +210,33 @@ export class HomePage {
   }
 
 
+   savebase64AsImageFile1(folderpath,filename,contentType, blob){
+      // Convert the base64 string in a Blob
+      var DataBlob = blob;
+      
+      console.log("Starting to write the file :2222");
+      
+      window.resolveLocalFileSystemURL(folderpath, function(dir) {
+          console.log("Access to the directory granted succesfully");
+      dir.getFile(filename, {create:true}, function(file) {
+              console.log("File created succesfully.");
+              file.createWriter(function(fileWriter) {
+                  console.log("Writing content to file");
+                  fileWriter.write(DataBlob);
+              }, function(){
+                  alert('Unable to save file in path '+ folderpath);
+              });
+      });
+      });
+  }
+
   test(id) {
     try {
       console.log("图片id:" + id);
       cordova.plugins.photoLibrary.getThumbnail(
         id, // or libraryItem.id
-        (res)=>{
-          console.log("123" + JSON.stringify(res))
-
-          let database = res.data;
-          console.log("*******" + database);
-          this.savebase64AsImageFile(cordova.file.externalDataDirectory, "test.png", database, "image/png");
+        (blob)=>{
+          this.savebase64AsImageFile1(cordova.file.externalDataDirectory, "test12345.png", "image/png", blob);
         },      
         (res)=>{
           console.log("456" + JSON.stringify(res))
