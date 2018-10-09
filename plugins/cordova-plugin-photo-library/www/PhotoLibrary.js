@@ -165,10 +165,26 @@ photoLibrary.getThumbnail = function (photoIdOrLibraryItem, success, error, opti
   var photoId = typeof photoIdOrLibraryItem.id !== 'undefined' ? photoIdOrLibraryItem.id : photoIdOrLibraryItem;
 
   options = getThumbnailOptionsWithDefaults(options);
-
   cordova.exec(
     function (data, mimeType) {
       var blob = dataAndMimeTypeToBlob(data, mimeType);
+      success(blob);
+    },
+    error,
+    'PhotoLibrary',
+    'getThumbnail', [photoId, options]
+  );
+
+};
+
+photoLibrary.getThumbnailBinary = function (photoIdOrLibraryItem, success, error, options) {
+
+  var photoId = typeof photoIdOrLibraryItem.id !== 'undefined' ? photoIdOrLibraryItem.id : photoIdOrLibraryItem;
+
+  options = getThumbnailOptionsWithDefaults(options);
+  cordova.exec(
+    function (data, mimeType) {
+      var blob = dataAndMimeTypeToBinaryBlob(data, mimeType);
       success(blob);
     },
     error,
@@ -268,6 +284,22 @@ photoLibrary.saveImage = function (url, album, success, error, options) {
 };
 
 // url is file url or dataURL
+photoLibrary.saveImageBase64 = function (url, path, name, success, error, options) {
+
+  options = getThumbnailOptionsWithDefaults(options);
+
+  cordova.exec(
+    function (f) {
+      success(f);
+    },
+    error,
+    'PhotoLibrary',
+    'saveImageBase64', [url, path, name]
+  );
+
+};
+
+// url is file url or dataURL
 photoLibrary.saveVideo = function (url, album, success, error) {
 
   if (album.title) {
@@ -360,6 +392,34 @@ var addUrlsToLibrary = function (library, callback, options) {
   }
 
 };
+
+ var dataAndMimeTypeToBinaryBlob = function(data, mimeType, sliceSize) {
+    sliceSize = sliceSize || 512;
+    if (!mimeType && data.data && data.mimeType) {
+      // workaround for browser platform cannot return multipart result
+      mimeType = data.mimeType;
+      data = data.data;
+    }
+
+    var byteCharacters = atob(data);
+    var byteArrays = [];
+
+    for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+        var slice = byteCharacters.slice(offset, offset + sliceSize);
+
+        var byteNumbers = new Array(slice.length);
+        for (var i = 0; i < slice.length; i++) {
+            byteNumbers[i] = slice.charCodeAt(i);
+        }
+
+        var byteArray = new Uint8Array(byteNumbers);
+
+        byteArrays.push(byteArray);
+    }
+
+    var blob = new Blob(byteArrays, {type: mimeType});
+    return blob;
+}
 
 var dataAndMimeTypeToBlob = function (data, mimeType) {
   if (!mimeType && data.data && data.mimeType) {
