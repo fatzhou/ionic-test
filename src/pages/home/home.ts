@@ -11,12 +11,13 @@ import { ItemDetailsPage } from '../item-details/item-details';
 import { PhotoLibrary, LibraryItem } from '@ionic-native/photo-library';
 declare var cordova;
 
-const THUMBNAIL_WIDTH = 256;
-const THUMBNAIL_HEIGHT = 192;
+const THUMBNAIL_WIDTH = 64;
+const THUMBNAIL_HEIGHT = 48;
 
-// declare var PhotoSwipe;
-// declare var PhotoSwipeUI_Default;
-// declare var cordova;
+declare var PhotoSwipe;
+declare var PhotoSwipeUI_Default;
+declare var cordova;
+declare var window;
 
 @Component({
   selector: 'page-home',
@@ -130,7 +131,7 @@ export class HomePage {
               this.library = library;
 
 
-              this.getURl(this.library[1].id);
+              // this.getURl(this.library[1].id);
               this.albums.forEach(item => {
                 item.photos = library.filter(x => {
                   return x.albumIds.indexOf(item.id) > -1;
@@ -156,36 +157,94 @@ export class HomePage {
   }
 
   trackById(index: number, libraryItem: LibraryItem): string { return libraryItem.id; }
-  getURl(id){
-    var that = this;
-    cordova.plugins.photoLibrary.getThumbnail(
-      id, // or libraryItem.id,
-      function(res){
-        that.newurl = 'data:image/jpeg;base64,'+res.data;
-        let database = that.newurl;
-        // let fullpath = 
-        cordova.plugins.photoLibrary.saveImageBase64(database,cordova.file.externalDataDirectory,'newbaseimg.png',function(){
-          console.log("成功存储图片");
-        });
-        console.log("getUrl 的返回值"+ JSON.stringify(res));
 
-        // console.log(" that newurl: " + that.newurl)
-        // that.base64ToGallery.base64ToGallery(, { prefix: '_img' }).then(
-        //   res => console.log('Saved image to gallery ', res),
-        //   err => console.log('Error saving image to gallery ', err)
-        // );
-      },
-      function(res){
-        that.newurl = 'data:image/jpeg;base64,'+res.data;
+  /**
+   * Convert a base64 string in a Blob according to the data and contentType.
+   * 
+   * @param b64Data {String} Pure base64 string without contentType
+   * @param contentType {String} the content type of the file i.e (image/jpeg - image/png - text/plain)
+   * @param sliceSize {Int} SliceSize to process the byteCharacters
+   * @see http://stackoverflow.com/questions/16245767/creating-a-blob-from-a-base64-string-in-javascript
+   * @return Blob
+   */
+   b64toBlob(b64Data, contentType, sliceSize) {
+          contentType = contentType || '';
+          sliceSize = sliceSize || 512;
 
-        console.log("getUrl 的返回值"+ JSON.stringify(res));
-        console.log("that  newurl: " + that.newurl)
+          var byteCharacters = atob(b64Data);
+          var byteArrays = [];
 
-      },
-      { // optional options
-        thumbnailWidth: 512,
-        thumbnailHeight: 384,
-        quality: 0.8
-      })
+          for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+              var slice = byteCharacters.slice(offset, offset + sliceSize);
+
+              var byteNumbers = new Array(slice.length);
+              for (var i = 0; i < slice.length; i++) {
+                  byteNumbers[i] = slice.charCodeAt(i);
+              }
+
+              var byteArray = new Uint8Array(byteNumbers);
+
+              byteArrays.push(byteArray);
+          }
+
+        var blob = new Blob(byteArrays, {type: contentType});
+        return blob;
+  }
+
+  /**
+   * Create a Image file according to its database64 content only.
+   * 
+   * @param folderpath {String} The folder where the file will be created
+   * @param filename {String} The name of the file that will be created
+   * @param content {Base64 String} Important : The content can't contain the following string (data:image/png[or any other format];base64,). Only the base64 string is expected.
+   */
+   savebase64AsImageFile(folderpath,filename,content,contentType){
+      // Convert the base64 string in a Blob
+      var DataBlob = this.b64toBlob(content,contentType, 512);
+      
+      console.log("Starting to write the file :3");
+      
+      window.resolveLocalFileSystemURL(folderpath, function(dir) {
+          console.log("Access to the directory granted succesfully");
+      dir.getFile(filename, {create:true}, function(file) {
+              console.log("File created succesfully.");
+              file.createWriter(function(fileWriter) {
+                  console.log("Writing content to file");
+                  fileWriter.write(DataBlob);
+              }, function(){
+                  alert('Unable to save file in path '+ folderpath);
+              });
+      });
+      });
+  }
+
+
+  test(id) {
+    try {
+      console.log("图片id:" + id);
+      cordova.plugins.photoLibrary.getThumbnail(
+        id, // or libraryItem.id
+        (res)=>{
+          console.log("123" + JSON.stringify(res))
+
+          let database = res.data;
+          console.log("*******" + database);
+          this.savebase64AsImageFile(cordova.file.externalDataDirectory, "test.png", database, "image/png");
+        },      
+        (res)=>{
+          console.log("456" + JSON.stringify(res))
+        },
+        { // optional options
+          thumbnailWidth: 512,
+          thumbnailHeight: 384,
+          quality: 0.8
+        })
+        // .then(res => {
+        //   console.log('getThumbnail:' + JSON.stringify(res))
+        // })      
+      } catch(e) {
+        console.log(e)
+      }
+
   }
 }

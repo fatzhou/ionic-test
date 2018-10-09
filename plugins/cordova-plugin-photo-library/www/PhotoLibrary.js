@@ -168,7 +168,7 @@ photoLibrary.getThumbnail = function (photoIdOrLibraryItem, success, error, opti
   cordova.exec(
     function (data, mimeType) {
       var blob = dataAndMimeTypeToBlob(data, mimeType);
-      success(blob);
+      success(data);
     },
     error,
     'PhotoLibrary',
@@ -270,10 +270,6 @@ photoLibrary.saveImage = function (url, album, success, error, options) {
 photoLibrary.saveImageBase64 = function (url, path, name, success, error, options) {
 
   options = getThumbnailOptionsWithDefaults(options);
-
-  // if (album.title) {
-  //   album = album.title;
-  // }
 
   cordova.exec(
     function (f) {

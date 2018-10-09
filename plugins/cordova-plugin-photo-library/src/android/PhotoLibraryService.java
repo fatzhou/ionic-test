@@ -1,5 +1,5 @@
 package com.terikon.cordova.photolibrary;
-
+import org.apache.cordova.LOG;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -589,14 +589,14 @@ public class PhotoLibraryService {
     put("ogg", ".ogv");
   }};
 
-  public void saveBase64Image(final Context context, final CordovaInterface cordova, final String url,  String path, String name, final JSONObjectRunnable completion)
+  public File saveImageBase64(final Context context, final CordovaInterface cordova, final String url,  String path, String name, final JSONObjectRunnable completion)
     throws IOException, URISyntaxException {
 
     return saveBase64(context, cordova, url, path, name, imageMimeToExtension);
 
   }
 
-  private void saveBase64(Context context, CordovaInterface cordova, String url, String path, String name, Map<String, String> mimeToExtension)
+  private File saveBase64(Context context, CordovaInterface cordova, String url, String path, String name, Map<String, String> mimeToExtension)
     throws IOException, URISyntaxException {
     File retVal = null;
     File targetFile;
@@ -630,10 +630,10 @@ public class PhotoLibraryService {
       os.flush();
       os.close();
 
-      retVal = imageFile;
+      retVal = targetFile;
 
     } catch (Exception e) {
-      Log.e("Base64ToGallery", "An exception occured while saving image: " + e.toString());
+      LOG.d("Base64ToGallery", "An exception occured while saving image: " + e.toString());
     }
 
     return retVal;

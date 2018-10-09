@@ -1,5 +1,5 @@
 package com.terikon.cordova.photolibrary;
-
+import org.apache.cordova.LOG;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -34,7 +34,7 @@ public class PhotoLibrary extends CordovaPlugin {
   public static final String ACTION_STOP_CACHING = "stopCaching";
   public static final String ACTION_REQUEST_AUTHORIZATION = "requestAuthorization";
   public static final String ACTION_SAVE_IMAGE = "saveImage";
-  public static final String ACTION_SAVE_IMAGE_BASE64 = "saveBase64Image";
+  public static final String ACTION_SAVE_IMAGE_BASE64 = "saveImageBase64";
   public static final String ACTION_SAVE_VIDEO = "saveVideo";
 
   public CallbackContext callbackContext;
@@ -222,7 +222,7 @@ public class PhotoLibrary extends CordovaPlugin {
         });
         return true;
 
-      } else if (ACTION_SAVE_IMAGE_NASE64.equals(action)) {
+      } else if (ACTION_SAVE_IMAGE_BASE64.equals(action)) {
         cordova.getThreadPool().execute(new Runnable() {
           public void run() {
             try {
@@ -231,7 +231,7 @@ public class PhotoLibrary extends CordovaPlugin {
               final String path = args.getString(1);
               final String name = args.getString(2);
 
-              service.saveBase64Image(getContext(), cordova, url, path, name, new PhotoLibraryService.JSONObjectRunnable() {
+              service.saveImageBase64(getContext(), cordova, url, path, name, new PhotoLibraryService.JSONObjectRunnable() {
                 @Override
                 public void run(JSONObject result) {
                   callbackContext.success(result);
