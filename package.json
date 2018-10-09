@@ -56,9 +56,6 @@
   "description": "An Ionic project",
   "cordova": {
     "plugins": {
-      "cordova-plugin-photo-library": {
-        "PHOTO_LIBRARY_USAGE_DESCRIPTION": "To choose photos"
-      },
       "cordova-plugin-whitelist": {},
       "cordova-plugin-device": {},
       "cordova-plugin-splashscreen": {},
@@ -67,7 +64,8 @@
       "cordova-plugin-file": {},
       "cordova-plugin-compat": {},
       "cordova-plugin-console": {},
-      "cordova-plugin-statusbar": {}
+      "cordova-plugin-statusbar": {},
+      "cordova-plugin-photo-library": {}
     },
     "platforms": [
       "android"
