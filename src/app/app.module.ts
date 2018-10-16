@@ -9,8 +9,14 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { File } from '@ionic-native/File';
 
+import { GlobalService } from '../providers/GlobalService'
+import { FileManager } from '../providers/FileManager'
+
 import { CDVPhotoLibraryPipe } from './cdvphotolibrary.pipe';
 import { PhotoLibrary } from '@ionic-native/photo-library';
+import { FileOpener } from '@ionic-native/file-opener';
+
+
 
 @NgModule({
   declarations: [
@@ -34,7 +40,11 @@ import { PhotoLibrary } from '@ionic-native/photo-library';
   providers: [
     PhotoLibrary,
     File,
-    StatusBar, SplashScreen,
+    GlobalService,
+    FileManager,
+    FileOpener,
+    StatusBar, 
+    SplashScreen,
     { provide: ErrorHandler, useClass: IonicErrorHandler }
   ]
 })

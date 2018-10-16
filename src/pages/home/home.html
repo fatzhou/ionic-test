@@ -7,7 +7,7 @@
 </ion-header>
 
 <ion-content padding>
-  <ion-list class="album-wrap">
+  <ion-list class="album-wrap" *ngIf="albums.length > 0">
     <div class="album" *ngFor="let album of albums" (click)="goAlbumDetail(album)">
       <p>{{ album.title }}({{ album.photos.length }})</p>
       <div class="photo-wrap" *ngFor="let photo of album.photos.slice(0, 4)">
@@ -15,10 +15,22 @@
       </div>
     </div>
   </ion-list>
-  <!-- virtualScroll is still problematic -->
-  <div style="width:300px;height:200px;background: red;">
-    <img [src]="newurl" alt="">
-    {{ newurl }}
-  </div>
+  
+  <!--  文件浏览器 -->
+  <ion-list class="album-wrap" *ngIf="allFileList.length > 0">
+    <div class="album" *ngFor="let entry of allFileList" (click)="browserLocal(entry)">
+      <p>{{ entry.name }}</p>
+      <p>{{ entry.fullPath }}</p>
+      <p>{{ entry.isFile ? '文件' : '文件夹' }}</p>
+    </div>
+  </ion-list>  
+
+  <!--  文件筛选器 -->
+  <ion-list class="album-wrap" *ngIf="bsfFileList.length > 0">
+    <div class="album" *ngFor="let file of bsfFileList">
+      <p>{{ file.name }}</p>
+      <p>{{ file.path }}</p>
+    </div>
+  </ion-list>
 
 </ion-content>
