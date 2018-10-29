@@ -7,6 +7,8 @@
 </ion-header>
 
 <ion-content padding>
+  <p (click)="openBrowser()">打开浏览器</p>
+
   <ion-list class="album-wrap" *ngIf="albums.length > 0">
     <div class="album" *ngFor="let album of albums" (click)="goAlbumDetail(album)">
       <p>{{ album.title }}({{ album.photos.length }})</p>

@@ -16,6 +16,7 @@ import { CDVPhotoLibraryPipe } from './cdvphotolibrary.pipe';
 import { PhotoLibrary } from '@ionic-native/photo-library';
 import { FileOpener } from '@ionic-native/file-opener';
 
+import { InAppBrowser } from '@ionic-native/in-app-browser';
 
 
 @NgModule({
@@ -40,6 +41,7 @@ import { FileOpener } from '@ionic-native/file-opener';
   providers: [
     PhotoLibrary,
     File,
+    InAppBrowser,
     GlobalService,
     FileManager,
     FileOpener,

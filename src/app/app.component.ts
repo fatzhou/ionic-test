@@ -10,7 +10,6 @@ import { GlobalService } from '../providers/GlobalService'
 import { FileManager } from '../providers/FileManager'
 
 import { FileOpener } from '@ionic-native/file-opener';
-
 declare var cordova;
 
 @Component({
@@ -22,12 +21,13 @@ export class MyApp {
 
   constructor(platform: Platform, 
               private splashScreen: SplashScreen, 
-              private file: File,
-              private statusBar: StatusBar) {
+              private file: File) {
+
+    console.log("2342342342432xw")
     platform.ready().then(() => {
+      console.log("平台加载完毕-33333---");
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
-      this.statusBar.styleDefault();
       this.splashScreen.hide();
 
     });
